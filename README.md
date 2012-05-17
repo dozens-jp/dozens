@@ -1,4 +1,4 @@
-dozens
+Dozens
 ======
 
 Wrapper of Dozens API
