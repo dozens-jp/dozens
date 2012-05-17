@@ -3,4 +3,7 @@ language: python
 python:
   - 2.7
 
+install:
+  - pip install coverage
+
 script: nosetests --with-coverage --cover-package=dozens
