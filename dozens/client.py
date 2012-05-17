@@ -3,10 +3,10 @@ import urllib
 import urllib2
 from .models import Zone
 from .models import Record
-from .exception import DozensException
+from .exceptions import DozensException
 
 
-class Dozens(object):
+class Client(object):
 
     AUTHORIZE_URL = 'http://dozens.jp/api/authorize.json'
     GET_ZONES_URL = 'http://dozens.jp/api/zone.json'
