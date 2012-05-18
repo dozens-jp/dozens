@@ -31,15 +31,19 @@ class Dozens(object):
         self.token = response.get('auth_token')
 
     def get_zones(self):
-        zones = self.get(self.GET_ZONES_URL).get('domain')
-        return [Zone(int(zone.get('id')), zone.get('name')) for zone in zones]
+        zones = self.get(self.GET_ZONES_URL)
+        if zones:
+            return [Zone(int(zone.get('id')), zone.get('name'))
+                    for zone in zones.get('domain')]
+        return []
 
     def add_zone(self, name, add_google_apps=False, google_authorize=None):
-        params = {
-            'name': name,
-            'add_google_apps': add_google_apps,
-            'google_authorize': google_authorize
-            }
+        params = {'name': name}
+        if add_google_apps:
+            params['add_google_apps'] = True
+            if google_authorize:
+                params['google_authorize'] = google_authorize
+
         zones = self.post(self.ADD_ZONE_URL, params).get('domain')
         for zone in zones:
             if zone.get('name') == name:
@@ -49,20 +53,23 @@ class Dozens(object):
         self.delete(self.DELETE_ZONE_URL % zone_id)
 
     def get_records(self, zone_name):
-        records = self.get(self.GET_RECORDS_URL % zone_name).get('record')
-        return [Record(int(record.get('id')),
-                       record.get('name'),
-                       record.get('type'),
-                       record.get('prio'),
-                       record.get('content'),
-                       int(record.get('ttl'))) for record in records]
+        records = self.get(self.GET_RECORDS_URL % zone_name)
+        if records:
+            return [Record(int(record.get('id')),
+                           record.get('name'),
+                           record.get('type'),
+                           record.get('prio'),
+                           record.get('content'),
+                           int(record.get('ttl')))
+                    for record in records.get('record')]
+        return []
 
     def add_record(self,
                    zone_name,
-                   record_name,
                    record_type,
-                   priority,
                    content,
+                   record_name=None,
+                   priority=None,
                    ttl=7200):
         params = {
             'domain': zone_name,
@@ -127,7 +134,8 @@ class Dozens(object):
         if method:
             request.get_method = lambda: method
         if data:
-            request.add_data(data)
+            print json.dumps(data)
+            request.add_data(json.dumps(data))
         for key, value in headers.items():
             request.add_header(key, value)
 
