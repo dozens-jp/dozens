@@ -1,15 +1,20 @@
 import json
 import dozens
-import urllib2
 import mock
-from StringIO import StringIO
 from unittest import TestCase
+
+try:
+    from urllib2 import addinfourl
+    from StringIO import StringIO
+except:
+    from urllib.response import addinfourl
+    from io import StringIO
 
 
 class DozensTestCase(TestCase):
 
     def test_start(self):
-        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urlopen') as m:
             m.return_value = self.mock_response({'auth_token': 'dummy_token'})
 
             testee = dozens.Dozens('user', 'key')
@@ -211,15 +216,15 @@ class DozensTestCase(TestCase):
         self.assertEqual(request.get_method(), 'GET')
 
     def test_get_with_query(self):
-        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urlopen') as m:
             m.return_value = self.mock_response({})
 
             testee = dozens.Dozens('user', 'key')
             testee.token = 'token'
-            testee.get('/url', {'key': 'value'})
+            testee.get('http://test.com/url', {'key': 'value'})
 
             request = m.call_args[0][0]
-            self.assertEqual(request.get_full_url(), '/url?key=value')
+            self.assertEqual(request.get_full_url(), 'http://test.com/url?key=value')
             self.assertEqual(request.get_method(), 'GET')
 
     def test_models(self):
@@ -236,7 +241,7 @@ class DozensTestCase(TestCase):
                                        '}'))
 
     def request(self, response, method, *args):
-        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urlopen') as m:
             m.return_value = response
             result = method(*args)
 
@@ -250,6 +255,6 @@ class DozensTestCase(TestCase):
 
     def mock_response(self, value):
         body = StringIO(json.dumps(value))
-        response = urllib2.addinfourl(body, {}, 'dummy_url')
+        response = addinfourl(body, {}, 'dummy_url')
         response.code = 200
         return response

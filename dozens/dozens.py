@@ -1,8 +1,15 @@
 import json
-import urllib
-import urllib2
 from .models import Zone
 from .models import Record
+
+try:
+    from urllib import urlencode
+    from urllib2 import Request
+    from urllib2 import urlopen
+except:
+    from urllib.parse import urlencode
+    from urllib.request import Request
+    from urllib.request import urlopen
 
 
 class Dozens(object):
@@ -112,7 +119,7 @@ class Dozens(object):
 
     def get(self, url, params={}):
         if params:
-            url = url + '?' + urllib.urlencode(params)
+            url = url + '?' + urlencode(params)
         return self._do_api_request(url)
 
     def post(self, url, params={}):
@@ -129,11 +136,11 @@ class Dozens(object):
         return self._do_request(url, data, headers, method)
 
     def _do_request(self, url, data={}, headers={}, method=None):
-        request = urllib2.Request(url)
+        request = Request(url)
         if method:
             request.get_method = lambda: method
         if data:
             request.add_data(json.dumps(data))
         for key, value in headers.items():
             request.add_header(key, value)
-        return json.loads(urllib2.urlopen(request).read())
+        return json.loads(urlopen(request).read())
