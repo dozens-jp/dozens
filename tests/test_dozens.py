@@ -9,7 +9,7 @@ from unittest import TestCase
 class DozensTestCase(TestCase):
 
     def test_start(self):
-        with mock.patch('dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
             m.return_value = self.mock_response({'auth_token': 'dummy_token'})
 
             testee = dozens.Dozens('user', 'key')
@@ -211,7 +211,7 @@ class DozensTestCase(TestCase):
         self.assertEqual(request.get_method(), 'GET')
 
     def test_get_with_query(self):
-        with mock.patch('dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
             m.return_value = self.mock_response({})
 
             testee = dozens.Dozens('user', 'key')
@@ -221,18 +221,6 @@ class DozensTestCase(TestCase):
             request = m.call_args[0][0]
             self.assertEqual(request.get_full_url(), '/url?key=value')
             self.assertEqual(request.get_method(), 'GET')
-
-    def test_with_error(self):
-        with mock.patch('dozens.urllib2.urlopen') as m:
-            try:
-                response = urllib2.addinfourl(StringIO(), {}, 'dummy_url')
-                response.code = 400
-                m.return_value = response
-
-                testee = dozens.Dozens('user', 'key')
-                testee._do_request('/url')
-            except Exception, e:
-                self.assertEqual(type(e), dozens.DozensException)
 
     def test_models(self):
         zone = dozens.Zone(1, 'name')
@@ -248,7 +236,7 @@ class DozensTestCase(TestCase):
                                        '}'))
 
     def request(self, response, method, *args):
-        with mock.patch('dozens.urllib2.urlopen') as m:
+        with mock.patch('dozens.dozens.urllib2.urlopen') as m:
             m.return_value = response
             result = method(*args)
 

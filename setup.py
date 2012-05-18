@@ -10,8 +10,11 @@ classifiers = [
     'Programming Language :: Python',
 ]
 
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.md')).read()
+try:
+    here = os.path.abspath(os.path.dirname(__file__))
+    README = open(os.path.join(here, 'README.md')).read()
+except IOError:
+    README = ''
 
 setup(
     name='dozens',
