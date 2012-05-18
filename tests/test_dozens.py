@@ -54,9 +54,11 @@ class DozensTestCase(TestCase):
         self.assertEqual(zone.name, 'name2')
         self.assertEqual(request.get_full_url(), testee.ADD_ZONE_URL)
         self.assertEqual(request.get_method(), 'POST')
-        self.assertEqual(request.data['name'], 'name2')
-        self.assertEqual(request.data['google_authorize'], 'google')
-        self.assertTrue(request.data['add_google_apps'])
+
+        params = json.loads(request.data)
+        self.assertEqual(params['name'], 'name2')
+        self.assertEqual(params['google_authorize'], 'google')
+        self.assertTrue(params['add_google_apps'])
 
     def test_delete_zone(self):
         testee = dozens.Dozens('user', 'key')
@@ -124,7 +126,7 @@ class DozensTestCase(TestCase):
         testee = dozens.Dozens('user', 'key')
         testee.token = 'token'
 
-        args = ('domain', 'name1', 'type1', 'prio1', 'content1', 7200)
+        args = ('domain', 'type1', 'content1', 'name1', 'prio1', 7200)
         record, request = self.request(response, testee.add_record, *args)
         self.assertEqual(record.id, 1)
         self.assertEqual(record.name, 'name1')
@@ -134,6 +136,14 @@ class DozensTestCase(TestCase):
         self.assertEqual(record.ttl, 7200)
         self.assertEqual(request.get_full_url(), testee.ADD_RECORD_URL)
         self.assertEqual(request.get_method(), 'POST')
+
+        params = json.loads(request.data)
+        self.assertEqual(params['domain'], 'domain')
+        self.assertEqual(params['type'], 'type1')
+        self.assertEqual(params['content'], 'content1')
+        self.assertEqual(params['name'], 'name1')
+        self.assertEqual(params['prio'], 'prio1')
+        self.assertEqual(params['ttl'], 7200)
 
     def test_update_record(self):
         dummy = [
@@ -165,6 +175,11 @@ class DozensTestCase(TestCase):
         self.assertEqual(request.get_full_url(), testee.UPDATE_RECORD_URL % 1)
         self.assertEqual(request.get_method(), 'POST')
 
+        params = json.loads(request.data)
+        self.assertEqual(params['prio'], 'prio1')
+        self.assertEqual(params['content'], 'content1')
+        self.assertEqual(params['ttl'], 7200)
+
     def test_delete_record(self):
         testee = dozens.Dozens('user', 'key')
         testee.token = 'token'
@@ -173,6 +188,27 @@ class DozensTestCase(TestCase):
         result, request = self.request(response, testee.delete_record, 1)
         self.assertEqual(request.get_full_url(), testee.DELETE_RECORD_URL % 1)
         self.assertEqual(request.get_method(), 'DELETE')
+
+    def test_get_empty_zones(self):
+        testee = dozens.Dozens('user', 'key')
+        testee.token = 'token'
+        response = self.mock_response([])
+
+        zones, request = self.request(response, testee.get_zones)
+        self.assertEqual(zones, [])
+        self.assertEqual(request.get_full_url(), testee.GET_ZONES_URL)
+        self.assertEqual(request.get_method(), 'GET')
+
+    def test_get_empty_records(self):
+        testee = dozens.Dozens('user', 'key')
+        testee.token = 'token'
+        response = self.mock_response([])
+
+        records, request = self.request(response, testee.get_records, 'domain')
+        self.assertEqual(records, [])
+        self.assertEqual(request.get_full_url(),
+                         testee.GET_RECORDS_URL % 'domain')
+        self.assertEqual(request.get_method(), 'GET')
 
     def test_get_with_query(self):
         with mock.patch('dozens.urllib2.urlopen') as m:

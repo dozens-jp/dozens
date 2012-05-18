@@ -134,7 +134,6 @@ class Dozens(object):
         if method:
             request.get_method = lambda: method
         if data:
-            print json.dumps(data)
             request.add_data(json.dumps(data))
         for key, value in headers.items():
             request.add_header(key, value)
