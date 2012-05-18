@@ -19,10 +19,16 @@ class Record(object):
         self.ttl = ttl
 
     def __str__(self):
-        return 'Record {id: %d, name: %s, type: %s, priority: %s, value: %s, ttl: %d}'\
-            % (self.id,
-               self.name,
-               self.type,
-               self.priority,
-               self.content,
-               self.ttl)
+        return ('Record {'
+                'id: %d, '
+                'name: %s, '
+                'type: %s, '
+                'priority: %s, '
+                'content: %s, '
+                'ttl: %d'
+                '}') % (self.id,
+                        self.name,
+                        self.type,
+                        self.priority,
+                        self.content,
+                        self.ttl)

@@ -90,7 +90,8 @@ class Dozens(object):
             params['content'] = content
         if ttl:
             params['ttl'] = ttl
-        records = self.post(self.UPDATE_RECORD_URL % record_id, params)
+        url = self.UPDATE_RECORD_URL % record_id
+        records = self.post(url, params).get('record')
         for record in records:
             if int(record.get('id')) == record_id:
                 return Record(record_id,
