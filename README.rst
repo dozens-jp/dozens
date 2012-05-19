@@ -7,7 +7,8 @@ Wrapper for `Dozens`_ API
     :target: http://travis-ci.org/mikamix/dozens
 
 Usage
------:
+-----
+:
     from dozens import Dozens
 
     user = 'user'               # user name for Dozens
