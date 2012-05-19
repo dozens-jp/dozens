@@ -6,8 +6,8 @@ Wrapper for `Dozens`_ API
 .. image:: https://secure.travis-ci.org/mikamix/dozens.png?branch=master
     :target: http://travis-ci.org/mikamix/dozens
 
-Usage::
-
+Usage:
+------
     from dozens import Dozens
 
     user = 'user'               # user name for Dozens
