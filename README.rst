@@ -6,6 +6,11 @@ Wrapper for `Dozens`_ API
 .. image:: https://secure.travis-ci.org/mikamix/dozens.png?branch=master
     :target: http://travis-ci.org/mikamix/dozens
 
+Install
+-------
+
+`pip install dozens`
+
 Usage
 -----
 
