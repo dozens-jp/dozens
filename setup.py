@@ -2,7 +2,7 @@ import os
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.1'
+version = '0.0.5'
 classifiers = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
@@ -12,7 +12,7 @@ classifiers = [
 
 try:
     here = os.path.abspath(os.path.dirname(__file__))
-    README = open(os.path.join(here, 'README.md')).read()
+    README = open(os.path.join(here, 'README.rst')).read()
 except IOError:
     README = ''
 

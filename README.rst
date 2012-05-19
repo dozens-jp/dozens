@@ -25,6 +25,6 @@ License
 
 Distributed under the `MIT License`.
 
-.. _Doens: https://dozens.jp/
+.. _Dozens: https://dozens.jp/
 .. _API doc: https://sites.google.com/a/dozens.jp/docs/
 .. _MIT License: http://www.opensource.org/licenses/mit-license.php
