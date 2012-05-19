@@ -9,7 +9,8 @@ Wrapper for `Dozens`_ API
 Usage
 -----
 
-:
+Create Dozens instance and call start():
+
     from dozens import Dozens
 
     user = 'user'               # user name for Dozens
