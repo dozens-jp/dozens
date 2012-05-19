@@ -8,6 +8,7 @@ Wrapper for `Dozens`_ API
 
 Usage
 -----
+
 :
     from dozens import Dozens
 
