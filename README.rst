@@ -9,7 +9,9 @@ Wrapper for `Dozens`_ API
 Install
 -------
 
-`pip install dozens`
+::
+
+    pip install dozens
 
 Usage
 -----
