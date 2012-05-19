@@ -11,7 +11,7 @@ Install
 
 ::
 
-    pip install dozens
+    $ pip install dozens
 
 Usage
 -----
